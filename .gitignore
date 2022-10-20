@@ -1,2 +1,4 @@
 data/
 trained_models/
+*/__pycache__/
+*/pyc

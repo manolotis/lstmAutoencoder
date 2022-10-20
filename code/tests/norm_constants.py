@@ -1,20 +1,12 @@
-from torch.utils.data.dataset import T_co
-
 from multipathPP.code.utils.train_utils import get_config, parse_arguments
-# from multipathPP.code.model.data import get_dataloader
 from lstmAutoencoder.code.model.data import LSTMAutoencoderDataset
 import numpy as np
 from tqdm import tqdm
 
 from torch.utils.data import Dataset, DataLoader
-import random
-import os
 
 args = parse_arguments()
 config = get_config(args)
-
-
-# dataloader = get_dataloader(config["train"]["data_config"])
 
 
 def get_dataloader(config):
@@ -25,43 +17,46 @@ def get_dataloader(config):
 
 dataloader = get_dataloader(config["data_config"])
 
-all_values = {}
+all_values = {
+    "target/width": [],
+    "target/length": [],
+    "target/history/yaw": [],
+    "target/history/x": [],
+    "target/history/y": [],
+    "target/history/vx": [],
+    "target/history/vy": [],
+    "target/history/valid": [],
+    "target/future/x": [],
+    "target/future/y": [],
+    "target/future/valid": [],
+}
 
 for data in tqdm(dataloader):
+    all_values["target/length"].extend(data["target/length"])
+    all_values["target/width"].extend(data["target/width"])
 
-    keys = [
-        "target/width",
-        "target/length",
-        "target/history/yaw",
-        "target/future/yaw",
-    ]
+    all_values["target/history/x"].extend(data["target/history/xy"].numpy()[..., 0].flatten().tolist())
+    all_values["target/history/y"].extend(data["target/history/xy"].numpy()[..., 1].flatten().tolist())
+    all_values["target/history/vx"].extend(data["target/history/v_xy"].numpy()[..., 0].flatten().tolist())
+    all_values["target/history/vy"].extend(data["target/history/v_xy"].numpy()[..., 1].flatten().tolist())
+    all_values["target/history/yaw"].extend(data["target/history/yaw"].numpy().flatten().tolist())
+    all_values["target/history/valid"].extend((data["target/history/valid"].numpy().flatten() > 0).tolist())
 
-    keys2 = [  # (b,11,2)
-        "target/history/xy",
-        "target/history/v_xy",
-        "target/future/xy",
-        # "target/future/v_xy",
-    ]
-
-    for k in keys:
-        if k not in all_values:
-            all_values[k] = []
-
-        try:
-            all_values[k].extend(data[k].flatten().tolist())
-        except AttributeError:
-            data[k] = np.array(data[k])
-            all_values[k].extend(data[k].flatten().tolist())
-
-    for k in keys2:
-        if k not in all_values:
-            all_values[k+"_x"] = []
-            all_values[k+"_y"] = []
-
-        all_values[k+"_x"].extend(data[k][..., 0].flatten().tolist())
-        all_values[k+"_y"].extend(data[k][..., 1].flatten().tolist())
-
+    all_values["target/future/x"].extend(data["target/future/xy"].numpy()[..., 0].flatten().tolist())
+    all_values["target/future/y"].extend(data["target/future/xy"].numpy()[..., 1].flatten().tolist())
+    all_values["target/future/valid"].extend((data["target/future/valid"].numpy().flatten() > 0).tolist())
 
 for k, values in all_values.items():
-    print(f"{k} mean: {np.array(all_values[k]).mean()}")
-    print(f"{k} std: {np.array(all_values[k]).std()}")
+    values = np.array(values)
+    timezone = None
+    if 'future' in k:
+        timezone = 'future'
+    if 'history' in k:
+        timezone = 'history'
+
+    if timezone is None:
+        print(f"{k} mean: {np.array(values).mean()}")
+        print(f"{k} std: {np.array(values).std()}")
+    else:
+        print(f"{k} mean: {np.array(values[all_values[f'target/{timezone}/valid']]).mean()}")
+        print(f"{k} std: {np.array(values[all_values[f'target/{timezone}/valid']]).std()}")

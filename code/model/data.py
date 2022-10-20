@@ -46,17 +46,13 @@ class LSTMAutoencoderDataset(Dataset):
         return ohe_data
 
     def _compute_lstm_input_data(self, data):
-        keys_to_stack = self._config["lstm_input_data"]
-        # keys_to_stack_diff = self._config["lstm_input_data_diff"]
+        keys_to_stack = self._config["input_data"]
         for subject in ["target"]:
             agent_type_ohe = self._compute_agent_type_and_is_sdc_ohe(data, subject)
             data[f"{subject}/history/lstm_data"] = np.concatenate(
                 [data[f"{subject}/history/{k}"] for k in keys_to_stack] + [agent_type_ohe], axis=-1)
             data[f"{subject}/history/lstm_data"] *= data[f"{subject}/history/valid"]
-            # data[f"{subject}/history/lstm_data_diff"] = np.concatenate(
-            #     [data[f"{subject}/history/{k}_diff"] for k in keys_to_stack_diff] + \
-            #     [agent_type_ohe[:, 1:, :]], axis=-1)
-            # data[f"{subject}/history/lstm_data_diff"] *= data[f"{subject}/history/valid_diff"]
+
         return data
 
     def __getitem__(self, idx):
@@ -71,13 +67,6 @@ class LSTMAutoencoderDataset(Dataset):
         np_data["filename"] = self._files[idx]
         np_data["target/history/yaw"] = angle_to_range(np_data["target/history/yaw"])
         np_data["other/history/yaw"] = angle_to_range(np_data["other/history/yaw"])
-        # np_data = self._generate_sin_cos(np_data)
-        # np_data = self._add_length_width(np_data)
-        # if self._config["mask_history"]:
-        #     for subject in ["target", "other"]:
-        #         np_data[f"{subject}/history/valid"] = self._mask_history(
-        #             np_data[f"{subject}/history/valid"], self._config["mask_history_fraction"])
-        # np_data = self._compute_agent_diff_features(np_data)
         np_data = self._compute_lstm_input_data(np_data)
 
         return np_data

@@ -51,6 +51,8 @@ def generate_filename(scene_data):
 
 
 def merge_and_save(renderers, data, output_path):
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
     data_to_numpy(data)
     preprocessed_dicts = [renderer.render(data) for renderer in renderers]
     for scene_number in range(len(preprocessed_dicts[0])):

@@ -2,9 +2,9 @@ data_config:
   dataset_config:
     data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/training/"
     n_shards: 1
-    lstm_input_data: [ "xy", "yaw", "v_xy", "valid" ]
+    input_data: [ "xy", "yaw", "v_xy", "valid" ]
   dataloader_config:
     batch_size: 42
-    shuffle: True
+    shuffle: False
     num_workers: 8
 
