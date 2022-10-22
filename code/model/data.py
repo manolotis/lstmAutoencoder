@@ -10,6 +10,62 @@ def angle_to_range(yaw):
     return yaw
 
 
+def normalize(data, config, split="train"):
+    features = tuple(config[split]["data_config"]["dataset_config"]["input_data"])
+    if features == ("xy", "yaw", "v_xy", "width", "length", "valid"):
+        normalization_means = {
+            "target/history/lstm_data": np.array([
+                -3.037965933131866,  # x
+                0.005443134484205298,  # y
+                -0.0033017450976257842,  # yaw
+                6.174656202228034,  # vx
+                -0.02157458059128233,  # vy
+                1.9719390214387036,  # width
+                4.374759175074724,  # length
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float32),
+        }
+        normalization_stds = {
+            "target/history/lstm_data": np.array([
+                3.793132077322926,
+                0.16012741081460383,
+                0.12045736633428678,
+                5.638115207720868,
+                0.3821443614578785,
+                0.4693856644817378,
+                1.507592546518198,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype=np.float32),
+        }
+    else:
+        raise Exception("Wrong features set")
+    keys = ['target/history/lstm_data']
+    for k in keys:
+        data[k] = (data[k] - normalization_means[k]) / (normalization_stds[k] + 1e-6)
+        data[k].clamp_(-15, 15)
+
+    data[f"target/history/lstm_data"] *= data[f"target/history/valid"]
+
+    return data
+
+
+def dict_to_cuda(d):
+    passing_keys = set([
+        'target/history/lstm_data', 'target/history/lstm_data_diff',
+        'other/history/lstm_data', 'other/history/lstm_data_diff',
+        'target/history/mcg_input_data', 'other/history/mcg_input_data',
+        'other_agent_history_scatter_idx', 'road_network_scatter_idx',
+        'other_agent_history_scatter_numbers', 'road_network_scatter_numbers',
+        'batch_size',
+        'road_network_embeddings',
+        'target/future/xy', 'target/future/valid'])
+    for k in d.keys():
+        if k not in passing_keys:
+            continue
+        v = d[k]
+        if not isinstance(v, torch.Tensor):
+            continue
+        d[k] = d[k].cuda()
+
+
 class LSTMAutoencoderDataset(Dataset):
 
     def __init__(self, config):
@@ -45,6 +101,18 @@ class LSTMAutoencoderDataset(Dataset):
         ohe_data = np.repeat(ohe_data, data["target/history/xy"].shape[1], axis=1)
         return ohe_data
 
+    def _add_length_width(self, data):
+        data["target/history/length"] = \
+            data["target/length"].reshape(-1, 1, 1) * np.ones_like(data["target/history/yaw"])
+        data["target/history/width"] = \
+            data["target/width"].reshape(-1, 1, 1) * np.ones_like(data["target/history/yaw"])
+
+        data["other/history/length"] = \
+            data["other/length"].reshape(-1, 1, 1) * np.ones_like(data["other/history/yaw"])
+        data["other/history/width"] = \
+            data["other/width"].reshape(-1, 1, 1) * np.ones_like(data["other/history/yaw"])
+        return data
+
     def _compute_lstm_input_data(self, data):
         keys_to_stack = self._config["input_data"]
         for subject in ["target"]:
@@ -67,6 +135,7 @@ class LSTMAutoencoderDataset(Dataset):
         np_data["filename"] = self._files[idx]
         np_data["target/history/yaw"] = angle_to_range(np_data["target/history/yaw"])
         np_data["other/history/yaw"] = angle_to_range(np_data["other/history/yaw"])
+        np_data = self._add_length_width(np_data)
         np_data = self._compute_lstm_input_data(np_data)
 
         return np_data
@@ -90,3 +159,10 @@ class LSTMAutoencoderDataset(Dataset):
 
         result_dict["batch_size"] = len(batch)
         return result_dict
+
+
+def get_dataloader(config):
+    dataset = LSTMAutoencoderDataset(config["dataset_config"])
+    dataloader = DataLoader(
+        dataset, collate_fn=LSTMAutoencoderDataset.collate_fn, **config["dataloader_config"])
+    return dataloader

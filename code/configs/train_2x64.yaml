@@ -1,0 +1,51 @@
+config_name: "lstm_2x64"
+
+train:
+  data_config:
+    dataset_config:
+      data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/training/"
+      input_data: [ "xy", "yaw", "v_xy", "width", "length", "valid" ]
+      mask_history: False
+      mask_history_fraction: 0.15
+      n_shards: 16
+    dataloader_config:
+      batch_size: 64
+      shuffle: True
+      num_workers: 32
+  optimizer:
+    lr: 0.001
+  n_epochs: 1000
+  patience: 50
+  validate_every_n_steps: 1000 # ignored for now, it validates after however many steps there are in one epoch
+  max_iterations: 5000001
+  normalize: True
+  normalize_output: True
+  clip_grad_norm: 0.4
+  scheduler: True
+
+
+val:
+  data_config:
+    dataset_config:
+      data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/validation/"
+      input_data: [ "xy", "yaw", "v_xy", "width", "length", "valid" ]
+      mask_history: False
+      n_shards: 1
+    dataloader_config:
+      batch_size: 64
+      shuffle: False
+      num_workers: 32
+
+model:
+  n_trajectories: 1
+  prediction_steps: 80
+  encoder:
+    num_layers: 2
+    hidden_size: 64
+    input_size: 14
+
+  decoder:
+    num_layers: 2
+    hidden_size: 64
+    prediction_features: 2
+
