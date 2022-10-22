@@ -93,7 +93,7 @@ print("N PARAMS=", params)
 
 epochs_without_improvement = 0
 
-for epoch in tqdm(this_epoch, range(config["train"]["n_epochs"])):
+for epoch in tqdm(range(this_epoch, config["train"]["n_epochs"])):
     pbar = tqdm(dataloader)
     epoch_losses_train = []
     epoch_losses_val = []
