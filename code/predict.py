@@ -67,7 +67,11 @@ def generate_filename(scene_data, agent_index):
     return f"scid_{scenario_id}__aid_{agent_id}__atype_{agent_type.item()}.npz"
 
 
-savefolder = os.path.join(config["test"]["output_config"]["out_path"], config["model"]["name"])
+model_name = config["model"]["name"]
+if "name_addition" in config["model"]:
+    model_name = config["model"]["name"] + "_" + config["model"]["name_addition"]
+
+savefolder = os.path.join(config["test"]["output_config"]["out_path"], model_name)
 
 if not os.path.exists(savefolder):
     os.makedirs(savefolder, exist_ok=True)
