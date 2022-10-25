@@ -6,6 +6,7 @@ from yaml import Loader
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-name", type=str, required=False, help="Model to load")
+    parser.add_argument("--model-name-addition", type=str, required=False, help="Addition for savefolder")
     parser.add_argument("--test-data-path", type=str, required=False, help="Path to prerendered training data")
     parser.add_argument("--out-path", type=str, required=False, help="Path to predictions folder")
     parser.add_argument("--viz-path", type=str, required=False, help="Path to visualization folder")
@@ -29,6 +30,8 @@ def get_config(args):
     # If provided in command line, override defaults
     if args.model_name is not None:
         config["model"]["name"] = args.model_name
+    if args.model_name_addition is not None:
+        config["model"]["name_addition"] = args.model_name_addition
 
     if args.test_data_path is not None:
         config["test"]["data_config"]["dataset_config"]["data_path"] = args.test_data_path

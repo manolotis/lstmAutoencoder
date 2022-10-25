@@ -68,9 +68,10 @@ def dict_to_cuda(d):
 
 class LSTMAutoencoderDataset(Dataset):
 
-    def __init__(self, config):
+    def __init__(self, config, noise_config=None):
         self._data_path = config["data_path"]
         self._config = config
+        self._noise_config = noise_config
         files = os.listdir(self._data_path)
         self._files = [os.path.join(self._data_path, f) for f in files]
         self._files = sorted(self._files)
@@ -113,6 +114,14 @@ class LSTMAutoencoderDataset(Dataset):
             data["other/width"].reshape(-1, 1, 1) * np.ones_like(data["other/history/yaw"])
         return data
 
+    def _hide_target_history(self, np_data):
+        # mask all timesteps except the latest one
+        for key in np_data.keys():
+            if "target/history" in key:
+                np_data[key][:, :-1, :] = -1
+        np_data["target/history/valid"][:, :-1, :] = 0
+        return np_data
+
     def _compute_lstm_input_data(self, data):
         keys_to_stack = self._config["input_data"]
         for subject in ["target"]:
@@ -136,6 +145,8 @@ class LSTMAutoencoderDataset(Dataset):
         np_data["target/history/yaw"] = angle_to_range(np_data["target/history/yaw"])
         np_data["other/history/yaw"] = angle_to_range(np_data["other/history/yaw"])
         np_data = self._add_length_width(np_data)
+        if self._noise_config["hide_target_past"]:
+            np_data = self._hide_target_history(np_data)
         np_data = self._compute_lstm_input_data(np_data)
 
         return np_data
@@ -162,7 +173,7 @@ class LSTMAutoencoderDataset(Dataset):
 
 
 def get_dataloader(config):
-    dataset = LSTMAutoencoderDataset(config["dataset_config"])
+    dataset = LSTMAutoencoderDataset(config["dataset_config"], config["noise_config"])
     dataloader = DataLoader(
         dataset, collate_fn=LSTMAutoencoderDataset.collate_fn, **config["dataloader_config"])
     return dataloader
