@@ -1,8 +1,11 @@
 data_config:
+  noise_config:
+    hide_target_past: False
   dataset_config:
     data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/training/"
     n_shards: 1
     input_data: [ "xy", "yaw", "v_xy", "valid" ]
+    shuffle: False
   dataloader_config:
     batch_size: 42
     shuffle: False

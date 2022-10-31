@@ -4,6 +4,7 @@ test:
     noise_config:
       exclude_road: False
       hide_target_past: True
+      noisy_heading: True
     dataset_config:
       data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/testing/"
       mask_history: False

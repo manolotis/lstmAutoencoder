@@ -1,6 +1,6 @@
 data_path: "/home/manolotis/sandbox/waymoMotion/data/reduced/tf_example/training/"
 output_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/training"
-n_jobs: 8
+n_jobs: 16
 n_shards: 1
 shard_id: 0
 multiprocessing: True
@@ -10,7 +10,6 @@ renderers:
       normalize: False
       agent_filtering:
         policy: "interesting"
-      drop_segments: 4
-      noisy_heading : False
+      noisy_heading : True
 
 

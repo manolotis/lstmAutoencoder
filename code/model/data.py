@@ -87,7 +87,8 @@ class LSTMAutoencoderDataset(Dataset):
         if config["n_shards"] > 1:
             self._files = [file for (i, file) in enumerate(self._files) if i % config["n_shards"] == 0]
 
-        random.shuffle(self._files)
+        if config["shuffle"]:
+            random.shuffle(self._files)
 
         assert len(self._files) > 0
 

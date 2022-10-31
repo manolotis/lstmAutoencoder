@@ -146,6 +146,10 @@ class LSTMAutoencoderRenderer(Renderer):
                 continue
 
             current_agent_scene_shift = agent_history_info["history/xy"][i][-1]
+
+            if self._config["noisy_heading"]:
+                agent_history_info["history/bbox_yaw"][i][-1] += np.pi / 2
+
             current_agent_scene_yaw = agent_history_info["history/bbox_yaw"][i][-1]
 
             current_scene_agents_coordinates_history = self._transfrom_to_agent_coordinate_system(
@@ -214,5 +218,7 @@ class LSTMAutoencoderRenderer(Renderer):
                 "other/history/valid": np.delete(agent_history_info["history/valid"], i, axis=0),
             }
 
+            if self._config["noisy_heading"]:
+                scene_data["yaw_original"] = current_agent_scene_yaw - np.pi / 2
             array_of_scene_data_dicts.append(scene_data)
         return array_of_scene_data_dicts
