@@ -7,6 +7,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train-data-path", type=str, required=False, help="Path to prerendered training data")
     parser.add_argument("--val-data-path", type=str, required=False, help="Path to prerendered validation data")
+    parser.add_argument("--train-data-path-noisy", type=str, required=False,
+                        help="Path to prerendered noisy training data")
+    parser.add_argument("--val-data-path-noisy", type=str, required=False,
+                        help="Path to prerendered noisy validation data")
     parser.add_argument("--n-jobs", type=int, required=False, help="Dataloader number of workers")
     parser.add_argument("--batch-size", type=int, required=False, help="Dataloader batch size")
     parser.add_argument("--n-shards", type=int, required=False,
@@ -29,6 +33,12 @@ def get_config(args):
 
     if args.val_data_path is not None:
         config["val"]["data_config"]["dataset_config"]["data_path"] = args.val_data_path
+
+    if args.train_data_path_noisy is not None:
+        config["train"]["data_config"]["noise_config"]["data_path"] = args.train_data_path_noisy
+
+    if args.val_data_path_noisy is not None:
+        config["val"]["data_config"]["noise_config"]["data_path"] = args.val_data_path_noisy
 
     if args.n_jobs is not None:
         config["train"]["data_config"]["dataloader_config"]["num_workers"] = args.n_jobs
