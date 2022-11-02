@@ -1,0 +1,17 @@
+data_config:
+  dataset_config:
+    data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/predictions/"
+  dataloader_config:
+    num_workers: 8
+output_config:
+  out_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/evaluations/"
+models:
+  - name: "lstm_3x128__0303335"
+  - name: "lstm_3x128__0303335_no_past"
+  - name: "lstm_3x128__0303335_noisy_heading"
+  - name: "lstm_3x128_no_past__21445f6_retrained"
+  - name: "lstm_3x128_no_past__21445f6_retrained_unperturbed"
+  - name: "lstm_3x128_noisy_heading_21445f6_retrained"
+  - name: "lstm_3x128_noisy_heading_21445f6_retrained_unperturbed"
+
+

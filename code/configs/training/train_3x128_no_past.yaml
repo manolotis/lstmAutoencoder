@@ -1,4 +1,4 @@
-config_name: "lstm_3x128"
+config_name: "lstm_3x128_no_past"
 
 train:
   data_config:

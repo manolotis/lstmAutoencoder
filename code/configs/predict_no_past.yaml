@@ -5,6 +5,7 @@ test:
       exclude_road: False
       hide_target_past: True
       noisy_heading: True
+      training: False
     dataset_config:
       data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/testing/"
       mask_history: False
@@ -21,7 +22,7 @@ test:
 
 
 model:
-  name: "lstm_1x512__0303335"
+  name: "lstm"
   path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/trained_models/"
   n_trajectories: 1
   prediction_steps: 80

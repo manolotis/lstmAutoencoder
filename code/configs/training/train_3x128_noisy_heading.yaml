@@ -1,4 +1,4 @@
-config_name: "lstm_3x128"
+config_name: "lstm_3x128_noisy_heading"
 
 train:
   data_config:
