@@ -73,6 +73,7 @@ class LSTMAutoencoderDataset(Dataset):
         self._config = config
         self._noise_config = noise_config
         self._training = noise_config["training"]
+        print("noise config: ", noise_config)
         files = os.listdir(self._data_path)
         self._files = [os.path.join(self._data_path, f) for f in files]
 
@@ -80,7 +81,7 @@ class LSTMAutoencoderDataset(Dataset):
         if noise_config is not None and self._training:
             # Do not add extra files for perturbations unless we are in training mode
             self._add_noisy_files()
-        print("Len files before adding noisy: ", len(self._files))
+        print("Len files after adding noisy: ", len(self._files))
 
         self._files = sorted(self._files)
 
@@ -183,6 +184,7 @@ class LSTMAutoencoderDataset(Dataset):
         np_data["other/history/yaw"] = angle_to_range(np_data["other/history/yaw"])
         np_data = self._add_length_width(np_data)
         if self._noise_config["hide_target_past"]:
+            print("hiding target history")
             np_data = self._hide_target_history(np_data)
         np_data = self._compute_lstm_input_data(np_data)
 
