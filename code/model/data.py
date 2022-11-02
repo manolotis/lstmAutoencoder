@@ -95,8 +95,7 @@ class LSTMAutoencoderDataset(Dataset):
         if config["n_shards"] > 1:
             self._files = [file for (i, file) in enumerate(self._files) if i % config["n_shards"] == 0]
 
-        if config["shuffle"]:
-            random.shuffle(self._files)
+        random.shuffle(self._files)
 
         assert len(self._files) > 0
 
@@ -191,7 +190,7 @@ class LSTMAutoencoderDataset(Dataset):
 
     @staticmethod
     def collate_fn(batch):
-        batch_keys = batch[0].keys()
+        batch_keys = [k for k in batch[0].keys() if k != "yaw_original"]
         result_dict = {k: [] for k in batch_keys}
 
         for sample_num, sample in enumerate(batch):
