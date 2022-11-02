@@ -8,7 +8,7 @@ OUT_PATH="/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/predictio
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing"
 CONFIG="/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict.yaml"
 
-python $BASE_SCRIPT --config CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128__0303335 --num-layers 3 --hidden-size 128
 
 ############# Trained on clean data, tested on perturbed data (no past) ############
@@ -16,7 +16,7 @@ python $BASE_SCRIPT --config CONFIG --test-data-path "$TEST_DATA_PATH" --batch-s
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing"
 CONFIG = "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict_no_past.yaml"
 
-python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128__0303335 --num-layers 3 --hidden-size 128 \
   --model-name-addition "no_past"
 
@@ -25,7 +25,7 @@ python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --b
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing_noisy_heading"
 CONFIG = "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict_noisy_heading.yaml"
 
-python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128__0303335 --num-layers 3 --hidden-size 128 \
   --model-name-addition "noisy_heading"
 
@@ -35,7 +35,7 @@ python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --b
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing"
 CONFIG = "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict_no_past.yaml"
 
-python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128_no_past__21445f6 --num-layers 3 --hidden-size 128 \
   --model-name-addition "retrained"
 
@@ -43,7 +43,7 @@ python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --b
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing_noisy_heading"
 CONFIG = "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict_noisy_heading.yaml"
 
-python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128_noisy_heading__21445f6 --num-layers 3 --hidden-size 128 \
   --model-name-addition "retrained"
 
@@ -52,7 +52,7 @@ python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --b
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing"
 CONFIG = "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict.yaml"
 
-python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128_no_past__21445f6 --num-layers 3 --hidden-size 128 \
   --model-name-addition "retrained_unperturbed"
 
@@ -60,6 +60,6 @@ python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --b
 TEST_DATA_PATH="/home/manolotis/datasets/waymo/motion v1.0/prerender/lstmAutoencoder/testing"
 CONFIG = "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/code/configs/predict.yaml"
 
-python $BASE_SCRIPT --config $BASE_CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
+python $BASE_SCRIPT --config $CONFIG --test-data-path "$TEST_DATA_PATH" --batch-size $BATCH_SIZE --n-jobs $N_JOBS --out-path $OUT_PATH \
   --model-name lstm_3x128_noisy_heading__21445f6 --num-layers 3 --hidden-size 128 \
   --model-name-addition "retrained_unperturbed"
