@@ -158,6 +158,9 @@ class LSTMAutoencoderDataset(Dataset):
         return data
 
     def _prepare_and_get_path(self, idx):
+        if not self._training:
+            return self._files[idx]
+
         file_to_load = self._files[idx]
         if "exclude_road" in file_to_load:
             path = file_to_load.replace("exclude_road", "")
