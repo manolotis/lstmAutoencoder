@@ -1,11 +1,5 @@
-import numpy as np
-import tensorflow as tf
 import torch
 import torch.nn as nn
-from torch import optim
-import torch.nn.functional as F
-from tqdm import trange
-import random
 
 
 class LSTMEncoder(nn.Module):

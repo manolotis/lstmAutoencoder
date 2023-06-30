@@ -1,3 +1,4 @@
+# ToDo: Move to waymo_utils repo
 from abc import ABC, abstractmethod
 import numpy as np
 from .utils import filter_valid, get_filter_valid_agent_history, get_normalize_data
@@ -57,7 +58,7 @@ class LSTMAutoencoderRenderer(Renderer):
 
     def _select_agents_with_any_validity(self, data):
         return data["state/current/valid"].sum(axis=-1) + \
-               data["state/future/valid"].sum(axis=-1) + data["state/past/valid"].sum(axis=-1)
+            data["state/future/valid"].sum(axis=-1) + data["state/past/valid"].sum(axis=-1)
 
     def _preprocess_data(self, data):
         agents_with_any_validity_selector = self._select_agents_with_any_validity(data)

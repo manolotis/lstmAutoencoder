@@ -10,7 +10,6 @@ args = parse_arguments()
 config = get_config(args)
 
 
-
 def get_dataloader(config):
     dataset = LSTMAutoencoderDataset(config["dataset_config"])
     dataloader = DataLoader(dataset, collate_fn=LSTMAutoencoderDataset.collate_fn, **config["dataloader_config"])
@@ -20,9 +19,9 @@ def get_dataloader(config):
 dataloader = get_dataloader(config["data_config"])
 
 all_values = {
-    "x":[],
-    "y":[],
-    "valid":[],
+    "x": [],
+    "y": [],
+    "valid": [],
 }
 
 max_trajs = 500
@@ -30,8 +29,8 @@ max_trajs = 500
 for data in tqdm(dataloader):
     n_agents = data["target/history/xy"].shape[0]
 
-    all_values["x"].extend(data["target/history/xy"].numpy()[...,0].flatten().tolist())
-    all_values["y"].extend(data["target/history/xy"].numpy()[...,1].flatten().tolist())
+    all_values["x"].extend(data["target/history/xy"].numpy()[..., 0].flatten().tolist())
+    all_values["y"].extend(data["target/history/xy"].numpy()[..., 1].flatten().tolist())
     all_values["valid"].extend((data["target/history/valid"].numpy().flatten() > 0).tolist())
 
     all_values["x"].extend(data["target/future/xy"].numpy()[..., 0].flatten().tolist())

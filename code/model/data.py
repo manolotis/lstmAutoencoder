@@ -187,7 +187,6 @@ class LSTMAutoencoderDataset(Dataset):
         np_data["other/history/yaw"] = angle_to_range(np_data["other/history/yaw"])
         np_data = self._add_length_width(np_data)
         if self._noise_config["hide_target_past"]:
-            print("hiding target history")
             np_data = self._hide_target_history(np_data)
         np_data = self._compute_lstm_input_data(np_data)
 

@@ -1,3 +1,4 @@
+# ToDo: Move to waymo_utils repo
 import tensorflow as tf
 
 _roadgraph_features = {
@@ -25,12 +26,12 @@ _general_state_features = {
     "state/tracks_to_predict": tf.io.FixedLenFeature([128], tf.int64, default_value=None),
     "scenario/id": tf.io.FixedLenFeature([1], tf.string, default_value=None)}
 
-
 _values_number_for_timezone = {
     "current": 1,
     "future": 80,
     "past": 10
 }
+
 
 def _generate_agent_features_by_timezone(timezone):
     assert timezone in ["current", "future", "past"]
@@ -66,6 +67,7 @@ def _generate_agent_features_by_timezone(timezone):
         f"state/{timezone}/vel_yaw": tf.io.FixedLenFeature(
             [128, n_values], tf.float32, default_value=None)}
 
+
 _traffic_light_features = {
     'traffic_light_state/current/state':
         tf.io.FixedLenFeature([1, 16], tf.int64, default_value=None),
@@ -88,6 +90,7 @@ _traffic_light_features = {
     'traffic_light_state/past/z':
         tf.io.FixedLenFeature([10, 16], tf.float32, default_value=None),
 }
+
 
 def generate_features_description():
     features_description = {}

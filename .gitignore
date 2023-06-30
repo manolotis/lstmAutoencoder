@@ -3,3 +3,9 @@ trained_models/
 **/__pycache__/
 **/.pyc
 predictions
+evaluations_rdlm
+evaluations
+evaluations_per_example
+code/bash/copy_evaluations.sh
+code/bash/copy_trained_models.sh
+code/bash/copy_evaluations_per_example.sh

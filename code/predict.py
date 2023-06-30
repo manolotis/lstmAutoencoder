@@ -1,12 +1,7 @@
-import sys
-
-sys.path.append("/home/manolotis/sandbox/robustness_benchmark/")
 import copy
-
 import torch
 
 torch.multiprocessing.set_sharing_strategy('file_system')
-import subprocess
 from model.lstm_encoder_decoder import LSTMEncoderDecoder
 from model.data import get_dataloader, dict_to_cuda, normalize
 import os
@@ -63,8 +58,8 @@ except Exception as e:
 def generate_filename(scene_data, agent_index):
     scenario_id = scene_data["scenario_id"][agent_index]
     agent_id = scene_data["agent_id"][agent_index]
-    agent_type = scene_data["target/agent_type"][agent_index]
-    return f"scid_{scenario_id}__aid_{agent_id}__atype_{agent_type.item()}.npz"
+    agent_type = int(scene_data["target/agent_type"][agent_index].item())
+    return f"scid_{scenario_id}__aid_{agent_id}__atype_{agent_type}.npz"
 
 
 model_name = config["model"]["name"]
@@ -91,8 +86,6 @@ for data in tqdm(test_dataloader):
     coordinates = coordinates * stds + means
     coordinates = coordinates.detach().cpu()
 
-
-
     for agent_index, agent_id in enumerate(data["agent_id"]):
         filename = generate_filename(data, agent_index)
         savedata = {
@@ -106,10 +99,5 @@ for data in tqdm(test_dataloader):
             "target/history/valid": data_original["target/history/valid"][agent_index],
             "target/future/valid": data_original["target/future/valid"][agent_index]
         }
-
-        # print("target/history/xy", data_original["target/history/xy"])
-        # print("target/future/xy", data_original["target/future/xy"])
-        # print("target/future/valid", data_original["target/future/valid"])
-        # exit()
 
         np.savez_compressed(os.path.join(savefolder, filename), **savedata)
