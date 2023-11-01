@@ -7,7 +7,7 @@ test:
       noisy_heading: False
       training: False
     dataset_config:
-      data_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/data/prerendered/testing/"
+      data_path: "/home/manolotis/sandbox/scenario_based_evaluation/lstmEncoderDecoder/data/prerendered/testing/"
       mask_history: False
       n_shards: 1
       input_data: [ "xy", "yaw", "v_xy", "width", "length", "valid" ]
@@ -17,13 +17,13 @@ test:
       num_workers: 8
   output_config:
     visualize: False
-    out_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/predictions/"
-    viz_path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/plots/predictions/"
+    out_path: "/home/manolotis/sandbox/scenario_based_evaluation/lstmEncoderDecoder/predictions/"
+    viz_path: "/home/manolotis/sandbox/scenario_based_evaluation/lstmEncoderDecoder/plots/predictions/"
 
 
 model:
   name: "lstm_1x512__0303335"
-  path: "/home/manolotis/sandbox/robustness_benchmark/lstmAutoencoder/trained_models/"
+  path: "/home/manolotis/sandbox/scenario_based_evaluation/lstmEncoderDecoder/trained_models/"
   n_trajectories: 1
   prediction_steps: 80
   encoder:

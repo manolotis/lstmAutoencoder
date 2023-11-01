@@ -25,6 +25,7 @@ config = get_config(args)
 
 
 def get_best_checkpoint(path):
+    print("path", path)
     list_of_files = glob.glob(f'{path}/*')
     for f in list_of_files:
         if "best" in f:
